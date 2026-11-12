@@ -87,6 +87,7 @@ function buildCsp(): string {
   return directives.join('; ')
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function middleware(_request: NextRequest) {
   const response = NextResponse.next()
   const { headers } = response

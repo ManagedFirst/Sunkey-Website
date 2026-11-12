@@ -2,7 +2,11 @@ import type { NextRequest } from 'next/server'
 import { NextResponse }     from 'next/server'
 import { Resend }           from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy-initialize so the build succeeds even without RESEND_API_KEY set.
+// The key is only needed at request time (runtime), not at build time.
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY ?? '')
+}
 
 const TO_ADDRESS   = 'info@sunkeydesignsystems.com'
 const FROM_ADDRESS = 'noreply@sunkeydesignsystems.com'
@@ -77,6 +81,8 @@ async function handleMeeting(data: MeetingPayload) {
 
   const fullName = [firstName.trim(), lastName?.trim()].filter(Boolean).join(' ')
 
+  const resend = getResend()
+
   // Notify Sunkey team
   await resend.emails.send({
     from:    `${FROM_NAME} <${FROM_ADDRESS}>`,
@@ -111,6 +117,8 @@ async function handleRequirement(data: RequirementPayload) {
   if (!requirement?.trim()) {
     return NextResponse.json({ error: 'Please describe your requirement.' }, { status: 400 })
   }
+
+  const resend = getResend()
 
   // Notify Sunkey team
   await resend.emails.send({

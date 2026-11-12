@@ -203,7 +203,7 @@ export default function ManufacturingPage() {
       </section>
 
       {/* Facility sections */}
-      {FACILITIES.map((fac, fi) => (
+      {FACILITIES.map((fac) => (
         <section
           key={fac.id}
           className={`py-[80px] ${typeof fac.bg === 'string' && fac.bg.startsWith('bg-') ? fac.bg : ''}`}

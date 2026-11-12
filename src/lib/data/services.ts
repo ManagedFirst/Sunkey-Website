@@ -113,24 +113,6 @@ export const RESOURCE_SERVICES: ServiceData[] = [
     category: 'resources',
     icon: 'Users',
   },
-  {
-    slug: 'skill-augmentation',
-    name: 'Specialist Skill Augmentation',
-    shortDescription:
-      'Plug a specific skill gap — FPGA design, RF engineering, high-speed layout, or firmware migration — without a full-time hire.',
-    specs: ['FPGA Engineers', 'RF Specialists', 'Firmware Dev', 'HW Validation'],
-    category: 'resources',
-    icon: 'BookOpen',
-  },
-  {
-    slug: 'system-integration',
-    name: 'System Integration & ATE',
-    shortDescription:
-      'Hardware validation, system integration, and Automated Test Equipment development for end-of-line production testing — at your facility or ours.',
-    specs: ['ATE Development', 'System Integration', 'HW Validation'],
-    category: 'resources',
-    icon: 'TestTubes',
-  },
 ]
 
 /** All services flattened — for sitemap, nav, and pSEO */
