@@ -1,133 +1,235 @@
 'use client'
-
-import Image from 'next/image'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import Image from 'next/image'
+import { Button } from '@/components/ui/Button'
+import { navigation } from '@/data/navigation'
+import { IconMenu, IconX, IconChevronDown } from '@/components/icons'
 
-const NAV_LINKS = [
-  { label: 'Services',       href: '/services'       },
-  { label: 'Manufacturing',  href: '/manufacturing'  },
-  { label: 'Process',        href: '/how-we-work'    },
-  { label: 'Industries',     href: '/industries'     },
-  { label: 'Work',           href: '/work'           },
-  { label: 'Resources',      href: '/resources'      },
-  { label: 'Contact',        href: '/contact'        },
-] as const
-
-export function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen]         = useState(false)
+// ── Desktop dropdown ──────────────────────────────────────────────────────────
+function DropdownItem({ item }: { item: typeof navigation[0] }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [open])
+  if (item.cta) {
+    return (
+      <Button variant="primary-light" href={item.href} size="sm">
+        {item.label}
+      </Button>
+    )
+  }
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false) }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
+  if (item.columns) {
+    return (
+      <div ref={ref} className="relative">
+        <button onClick={() => setOpen(o => !o)}
+          className="nav-link flex items-center gap-1 py-1"
+          aria-expanded={open}>
+          {item.label}
+          <IconChevronDown size={14} strokeWidth={2}
+            className={`text-muted transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+        </button>
+
+        {open && (
+          <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 z-50 animate-fade-in"
+            style={{ width: 'min(920px, 90vw)' }}>
+            <div className="bg-white rounded-card shadow-card-hover border border-border-default p-6"
+              style={{ borderTop: '2px solid #2563EB' }}>
+              <div className="grid grid-cols-3 gap-6">
+                {item.columns!.map(col => (
+                  <div key={col.heading}>
+                    <Link href={col.href}
+                      className="block text-[11px] font-bold text-navy uppercase tracking-widest mb-3 hover:text-blue transition-colors"
+                      onClick={() => setOpen(false)}>
+                      {col.heading}
+                    </Link>
+                    <ul className="space-y-2">
+                      {col.items.map(sub => (
+                        <li key={sub.href}>
+                          <Link href={sub.href} onClick={() => setOpen(false)}
+                            className="group flex flex-col">
+                            <span className="text-[14px] font-medium text-charcoal group-hover:text-blue transition-colors">
+                              {sub.label}
+                            </span>
+                            {sub.description && (
+                              <span className="text-[12px] text-muted">{sub.description}</span>
+                            )}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  if (item.items) {
+    return (
+      <div ref={ref} className="relative">
+        <button onClick={() => setOpen(o => !o)}
+          className="nav-link flex items-center gap-1 py-1"
+          aria-expanded={open}>
+          {item.label}
+          <IconChevronDown size={14} strokeWidth={2}
+            className={`text-muted transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+        </button>
+
+        {open && (
+          <div className="absolute left-0 top-full mt-3 z-50 w-72 animate-fade-in">
+            <div className="bg-white rounded-card shadow-card-hover border border-border-default py-2"
+              style={{ borderTop: '2px solid #2563EB' }}>
+              {item.items.map(sub => (
+                <Link key={sub.href} href={sub.href} onClick={() => setOpen(false)}
+                  className="flex flex-col px-5 py-2.5 hover:bg-offwhite transition-colors group">
+                  <span className="text-[14px] font-medium text-charcoal group-hover:text-blue transition-colors">
+                    {sub.label}
+                  </span>
+                  {sub.description && (
+                    <span className="text-[12px] text-muted">{sub.description}</span>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
-    <LazyMotion features={domAnimation}>
-      <header
-        className={[
-          'fixed inset-x-0 top-0 z-50 transition-all duration-300',
-          scrolled
-            ? 'bg-[rgba(13,15,20,0.94)] backdrop-blur-md shadow-[0_1px_0_rgba(255,255,255,0.04)] py-3'
-            : 'py-5',
-        ].join(' ')}
-      >
-        <div className="section-container">
-          <div className="flex items-center justify-between">
+    <Link href={item.href!} className="nav-link py-1">{item.label}</Link>
+  )
+}
 
-            {/* Logo */}
-            <Link href="/" className="flex items-center flex-shrink-0 cursor-pointer" aria-label="Sunkey Design Systems home">
-              <Image
-                src="/images/logo-white.png"
-                alt="Sunkey Design Systems"
-                width={180}
-                height={40}
-                priority
-                className="h-9 w-auto"
-              />
-            </Link>
+// ── Mobile nav overlay ────────────────────────────────────────────────────────
+function MobileNav({ onClose }: { onClose: () => void }) {
+  const [openSection, setOpenSection] = useState<string | null>(null)
 
-            {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center" aria-label="Main navigation">
-              <ul className="flex items-center gap-8 list-none">
-                {NAV_LINKS.map(link => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-[0.85rem] font-medium text-white/60 tracking-[-0.01em] hover:text-white transition-colors duration-150 cursor-pointer"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+  return (
+    <div className="fixed inset-0 z-50 bg-navy flex flex-col animate-fade-in">
+      <div className="flex items-center justify-between px-6 h-[72px] border-b border-white/10 flex-shrink-0">
+        <Image src="/logo.png" alt="ManagedFirst Technologies" width={160} height={44} className="h-8 w-auto brightness-0 invert" />
+        <button onClick={onClose} className="p-2 text-white/60 hover:text-white transition-colors">
+          <IconX size={22} />
+        </button>
+      </div>
 
-            {/* CTA + toggle */}
-            <div className="flex items-center gap-3">
-              <Link href="/contact" className="btn-primary hidden lg:inline-flex text-[0.85rem] px-5 py-2.5">
-                Book a Call
-              </Link>
-              <button
-                className="lg:hidden flex items-center justify-center w-9 h-9 text-white cursor-pointer"
-                onClick={() => setOpen(p => !p)}
-                aria-label={open ? 'Close menu' : 'Open menu'}
-                aria-expanded={open}
-              >
-                {open ? <X size={20} /> : <Menu size={20} />}
-              </button>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        <AnimatePresence>
-          {open && (
-            <m.div
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-              className="lg:hidden absolute inset-x-0 top-full bg-[rgba(13,15,20,0.98)] backdrop-blur-md border-t border-white/[0.06]"
-            >
-              <div className="section-container py-6 flex flex-col gap-5">
-                {NAV_LINKS.map(link => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="text-[0.95rem] font-semibold text-white/70 hover:text-white transition-colors duration-150 cursor-pointer"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                <div className="pt-3 border-t border-white/[0.06]">
-                  <Link href="/contact" className="btn-primary w-full justify-center" onClick={() => setOpen(false)}>
-                    Book a Call
-                  </Link>
-                </div>
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-1">
+        {navigation.map(item => {
+          if (item.cta) {
+            return (
+              <div key={item.label} className="pt-6 border-t border-white/10">
+                <Button variant="primary-dark" href={item.href} className="w-full justify-center" onClick={onClose}>
+                  {item.label}
+                </Button>
               </div>
-            </m.div>
-          )}
-        </AnimatePresence>
+            )
+          }
+
+          const allItems = item.items ?? item.columns?.flatMap(c => c.items) ?? []
+          const isOpen   = openSection === item.label
+
+          if (allItems.length > 0) {
+            return (
+              <div key={item.label}>
+                <button onClick={() => setOpenSection(isOpen ? null : item.label)}
+                  className="w-full flex items-center justify-between py-3 text-white font-display font-semibold text-[16px]">
+                  {item.label}
+                  <IconChevronDown size={18} strokeWidth={2}
+                    className={`text-white/40 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isOpen && (
+                  <div className="pl-4 pb-3 space-y-1 border-l border-teal/30 ml-2">
+                    {allItems.map(sub => (
+                      <Link key={sub.href} href={sub.href} onClick={onClose}
+                        className="block py-2 text-white/65 hover:text-white text-[14px] transition-colors">
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          }
+
+          return (
+            <Link key={item.label} href={item.href!} onClick={onClose}
+              className="block py-3 text-white font-display font-semibold text-[16px] hover:text-teal transition-colors">
+              {item.label}
+            </Link>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// ── Navbar ────────────────────────────────────────────────────────────────────
+export function Navbar() {
+  const [scrolled, setScrolled] = useState(false)
+  const [mobile, setMobile]     = useState(false)
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', handler, { passive: true })
+    return () => window.removeEventListener('scroll', handler)
+  }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = mobile ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [mobile])
+
+  return (
+    <>
+      <header className={`sticky top-0 z-40 h-[72px] flex items-center transition-all duration-250
+        ${scrolled
+          ? 'bg-white/90 backdrop-blur-xl shadow-nav-scrolled border-b border-border-default'
+          : 'bg-white border-b border-border-default'
+        }`}>
+        <div className="site-container flex items-center justify-between w-full">
+
+          {/* Logo */}
+          <Link href="/" className="flex items-center flex-shrink-0" aria-label="ManagedFirst Technologies">
+            <Image
+              src="/logo.png"
+              alt="ManagedFirst Technologies"
+              width={200}
+              height={55}
+              priority
+              className="h-9 w-auto"
+            />
+          </Link>
+
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex items-center gap-7" aria-label="Main navigation">
+            {navigation.map(item => (
+              <DropdownItem key={item.label} item={item} />
+            ))}
+          </nav>
+
+          {/* Mobile toggle */}
+          <button className="lg:hidden p-2 text-charcoal hover:text-blue transition-colors"
+            onClick={() => setMobile(true)} aria-label="Open navigation">
+            <IconMenu size={22} />
+          </button>
+        </div>
       </header>
-    </LazyMotion>
+
+      {mobile && <MobileNav onClose={() => setMobile(false)} />}
+    </>
   )
 }

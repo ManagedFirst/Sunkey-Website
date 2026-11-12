@@ -1,257 +1,247 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
+import { buildMetadata } from '@/lib/metadata'
+import { breadcrumbSchema, schemaToString } from '@/lib/schema'
+import { AnimateIn } from '@/components/AnimateIn'
 
-export const metadata: Metadata = {
-  title:  'Privacy Policy',
+export const metadata = buildMetadata({
+  title: 'Privacy Policy',
   description:
-    'How Sunkey Design Systems collects, uses, and protects personal data. Covers contact form submissions and optional analytics.',
-  robots: { index: true, follow: false },
-  alternates: { canonical: 'https://sunkeydesignsystems.com/privacy-policy' },
-}
+    'How ManagedFirst Technologies collects, uses, and protects your personal data under the Digital Personal Data Protection Act, 2023.',
+  canonicalPath: '/privacy-policy',
+})
 
-const LAST_UPDATED = '1 August 2025'
+const EFFECTIVE_DATE = '12 November 2026'
+const COMPANY = 'ManagedFirst Technologies Private Limited'
+const CIN = 'U62090TN2026PTC197745'
+const ADDRESS =
+  '204, 7th Street, Malleeswari Nagar, Madambakkam, Tambaram, Kanchipuram – 600 126, Tamil Nadu, India'
+const EMAIL = 'vipul@managedfirsttechnologies.com'
+const WEBSITE = 'https://managedfirsttechnologies.com'
 
 export default function PrivacyPolicyPage() {
-  return (
-    <div className="bg-white min-h-screen pt-[140px] pb-[100px]">
-      <div className="section-container max-w-[780px]">
+  const breadcrumb = breadcrumbSchema([
+    { name: 'Home', href: '/' },
+    { name: 'Privacy Policy' , href: '/privacy-policy' },
+  ])
 
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: schemaToString(breadcrumb) }}
+      />
+
+      <main className="bg-white">
         {/* Header */}
-        <div className="mb-12">
-          <div className="text-[0.72rem] font-bold tracking-[0.14em] uppercase text-brand-red mb-3">
-            Legal
+        <section className="bg-[#0F172A] py-16 md:py-20">
+          <div className="container mx-auto max-w-4xl px-6">
+            <AnimateIn>
+              <p className="mb-3 text-sm font-medium uppercase tracking-widest text-[#06B6D4]">
+                Legal
+              </p>
+              <h1 className="text-3xl font-bold text-white md:text-4xl">Privacy Policy</h1>
+              <p className="mt-4 text-slate-400">
+                Effective date: {EFFECTIVE_DATE}
+              </p>
+            </AnimateIn>
           </div>
-          <h1 className="text-[2.2rem] font-black tracking-tightest leading-[1.1] text-dark mb-4">
-            Privacy Policy
-          </h1>
-          <p className="text-[0.85rem] text-muted">
-            Last updated: {LAST_UPDATED}
-          </p>
-        </div>
+        </section>
 
-        <div className="prose-legal">
+        {/* Content */}
+        <section className="py-16 md:py-20">
+          <div className="container mx-auto max-w-4xl px-6">
+            <AnimateIn>
+              <div className="prose prose-slate max-w-none prose-headings:text-[#0F172A] prose-headings:font-semibold prose-a:text-[#2563EB] prose-a:no-underline hover:prose-a:underline">
 
-          <Section title="1. Who We Are">
-            <p>
-              This website is operated by <strong>Sunkey Design Systems Private Limited</strong>,
-              an electronics engineering company incorporated in India (CIN: U71100TN2025PTC178926),
-              with its registered office in Chennai, Tamil Nadu, India. We are referred to in this
-              policy as &ldquo;Sunkey&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;.
-            </p>
-            <p>
-              We are the data controller for personal data collected through this website. Questions
-              about this policy or your personal data can be sent to{' '}
-              <a href="mailto:info@sunkeydesignsystems.com">info@sunkeydesignsystems.com</a>.
-            </p>
-          </Section>
+                <p className="lead text-lg text-slate-600">
+                  {COMPANY} (&ldquo;ManagedFirst&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) operates the website at{' '}
+                  <a href={WEBSITE}>{WEBSITE}</a>. This Privacy Policy explains what personal data we collect when you visit our website or contact us, how we use it, and your rights under applicable law — including the <strong>Digital Personal Data Protection Act, 2023 (DPDPA)</strong>.
+                </p>
 
-          <Section title="2. What Data We Collect and Why">
-            <p>We collect personal data only through the contact form on this website.</p>
-            <SubSection heading="Contact form submissions">
-              <p>
-                When you submit the &ldquo;Book a Discovery Call&rdquo; or &ldquo;Share Requirement&rdquo;
-                form, we collect your name, work email address, company name, and the project or service
-                details you provide. We use this information solely to respond to your enquiry and to
-                scope the services you have asked about.
-              </p>
-              <p>
-                <strong>Legal basis:</strong> Legitimate interests (Article 6(1)(f) GDPR) — we have a
-                legitimate interest in receiving and responding to business enquiries. We process no more
-                data than is necessary for this purpose.
-              </p>
-            </SubSection>
-            <SubSection heading="Analytics (optional, consent-based)">
-              <p>
-                If you accept analytics cookies, we use Google Analytics (via Google Tag Manager) to
-                understand how visitors use this site — which pages are visited, how long visitors stay,
-                and how they arrive. This data is aggregated and does not identify you personally.
-              </p>
-              <p>
-                <strong>Legal basis:</strong> Consent (Article 6(1)(a) GDPR). You can withdraw consent
-                at any time by clearing your browser cookies. No analytics data is collected unless you
-                accept.
-              </p>
-            </SubSection>
-          </Section>
+                <p className="text-slate-600">
+                  Please read this policy carefully. By using our website you acknowledge that you have read and understood it.
+                </p>
 
-          <Section title="3. How Long We Keep Your Data">
-            <p>
-              Contact form submissions are retained for up to two years from the date of receipt.
-              If a submission results in an active business engagement, relevant data may be kept for
-              the duration of the engagement plus any applicable statutory retention period under Indian law.
-            </p>
-            <p>
-              Analytics data is retained according to Google Analytics&rsquo; standard retention settings
-              (14 months by default). Sunkey does not maintain a separate copy of analytics data.
-            </p>
-          </Section>
+                {/* 1 */}
+                <h2 className="mt-10 text-xl">1. Who we are</h2>
+                <p>
+                  <strong>Data Fiduciary (Controller):</strong><br />
+                  {COMPANY}<br />
+                  CIN: {CIN}<br />
+                  {ADDRESS}
+                </p>
+                <p>
+                  <strong>Grievance Officer / Privacy Contact:</strong><br />
+                  Vipul Kumar S. Jain<br />
+                  Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+                </p>
 
-          <Section title="4. Who We Share Data With">
-            <p>We share contact form data with the following processors only:</p>
-            <ul>
-              <li>
-                <strong>Resend, Inc.</strong> (resend.com) — our email delivery provider, used to send
-                notification emails to our team and confirmation emails to you. Resend processes your
-                name and email address on our behalf. Data is processed in the United States under
-                standard contractual clauses.
-              </li>
-            </ul>
-            <p>
-              If you accept analytics cookies, data is shared with:
-            </p>
-            <ul>
-              <li>
-                <strong>Google LLC</strong> — for Google Analytics. Processed under Google&rsquo;s
-                standard data processing terms. See{' '}
-                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
-                  Google&rsquo;s Privacy Policy
-                </a>.
-              </li>
-            </ul>
-            <p>
-              We do not sell, rent, or share your personal data with any other third parties for
-              marketing or commercial purposes.
-            </p>
-          </Section>
+                {/* 2 */}
+                <h2 className="mt-10 text-xl">2. What personal data we collect</h2>
+                <p>
+                  We collect personal data only when you actively provide it to us through the forms on our website.
+                </p>
 
-          <Section title="5. Your Rights">
-            <p>
-              If you are located in the European Economic Area, the United Kingdom, or another
-              jurisdiction with applicable data protection law, you have the following rights:
-            </p>
-            <ul>
-              <li><strong>Access:</strong> Request a copy of the personal data we hold about you.</li>
-              <li><strong>Rectification:</strong> Request correction of inaccurate or incomplete data.</li>
-              <li><strong>Erasure:</strong> Request deletion of your data where there is no lawful basis for continued processing.</li>
-              <li><strong>Restriction:</strong> Request that we limit how we use your data while a dispute is being resolved.</li>
-              <li><strong>Portability:</strong> Receive your data in a machine-readable format where technically feasible.</li>
-              <li><strong>Objection:</strong> Object to processing based on legitimate interests. We will stop unless we have compelling grounds that override your interests.</li>
-              <li><strong>Withdraw consent:</strong> Where processing is based on consent, withdraw it at any time by clearing your cookies.</li>
-            </ul>
-            <p>
-              To exercise any right, email{' '}
-              <a href="mailto:info@sunkeydesignsystems.com">info@sunkeydesignsystems.com</a>.
-              We will respond within 30 days. You also have the right to lodge a complaint with
-              your local data protection authority.
-            </p>
-          </Section>
+                <h3 className="text-base font-semibold text-slate-700">2.1 Contact form</h3>
+                <p>When you submit an enquiry, we collect:</p>
+                <ul>
+                  <li>Full name</li>
+                  <li>Business email address</li>
+                  <li>Phone number (optional)</li>
+                  <li>Company / organisation name</li>
+                  <li>Your message</li>
+                </ul>
 
-          <Section title="6. Cookies">
-            <p>
-              This website uses two categories of cookies:
-            </p>
-            <ul>
-              <li>
-                <strong>Strictly necessary:</strong> A cookie that stores your analytics consent
-                preference. This does not track you and is necessary for the cookie banner to work.
-                It is set regardless of your consent choice.
-              </li>
-              <li>
-                <strong>Analytics (optional):</strong> Google Analytics cookies, set only after you
-                accept. These include <code>_ga</code>, <code>_ga_*</code>, and related cookies
-                that help us understand site usage. If you decline, these cookies are not set.
-              </li>
-            </ul>
-            <p>
-              You can withdraw consent at any time by clearing your browser cookies and reloading
-              the page — the consent banner will reappear.
-            </p>
-          </Section>
+                <h3 className="text-base font-semibold text-slate-700">2.2 Resource request form</h3>
+                <p>
+                  When you request a downloadable resource (such as the DPDPA Compliance Checklist), we collect:
+                </p>
+                <ul>
+                  <li>Full name</li>
+                  <li>Business email address</li>
+                  <li>Company / organisation name</li>
+                </ul>
+                <p>
+                  You expressly consent to us sending the requested resource to the email address you provide.
+                </p>
 
-          <Section title="7. Security">
-            <p>
-              This website is served over HTTPS. Contact form data is transmitted to Resend using
-              TLS encryption. We do not store form submissions in our own database — they are
-              delivered directly as email notifications to our team.
-            </p>
-          </Section>
+                <h3 className="text-base font-semibold text-slate-700">2.3 Analytics data</h3>
+                <p>
+                  We use <strong>Google Analytics 4</strong> and <strong>Google Tag Manager</strong> to understand how visitors use our website. These tools collect anonymised usage data, including:
+                </p>
+                <ul>
+                  <li>Pages visited and time spent</li>
+                  <li>Browser type, operating system, and device category</li>
+                  <li>Approximate geographic region (country / city — not precise location)</li>
+                  <li>Referring website or search term</li>
+                </ul>
+                <p>
+                  This data is processed by Google LLC under their own Privacy Policy and Terms of Service. We do not receive or store individually identifiable analytics data.
+                </p>
 
-          <Section title="8. Changes to This Policy">
-            <p>
-              We may update this policy when our data practices change. The &ldquo;Last updated&rdquo;
-              date at the top of this page reflects the most recent revision. We recommend reviewing
-              this policy periodically.
-            </p>
-          </Section>
+                {/* 3 */}
+                <h2 className="mt-10 text-xl">3. How we use your personal data</h2>
+                <table className="w-full text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50">
+                      <th className="border border-slate-200 px-4 py-2 text-left font-semibold">Purpose</th>
+                      <th className="border border-slate-200 px-4 py-2 text-left font-semibold">Legal basis (DPDPA)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border border-slate-200 px-4 py-2">Responding to your enquiry</td>
+                      <td className="border border-slate-200 px-4 py-2">Your consent (provided at point of submission)</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-slate-200 px-4 py-2">Delivering a requested resource</td>
+                      <td className="border border-slate-200 px-4 py-2">Your consent (provided at point of submission)</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-slate-200 px-4 py-2">Improving our website and services</td>
+                      <td className="border border-slate-200 px-4 py-2">Our legitimate interests (anonymised analytics)</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-slate-200 px-4 py-2">Following up on a business enquiry</td>
+                      <td className="border border-slate-200 px-4 py-2">Our legitimate interests in providing our services</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-slate-200 px-4 py-2">Complying with legal obligations</td>
+                      <td className="border border-slate-200 px-4 py-2">Legal obligation</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p className="mt-4">
+                  We do not sell, rent, or trade your personal data to any third party for their own marketing purposes.
+                </p>
 
-          <Section title="9. Contact">
-            <p>
-              For questions about this policy or to exercise your data rights:
-            </p>
-            <p>
-              <strong>Sunkey Design Systems Private Limited</strong><br />
-              Chennai, Tamil Nadu, India<br />
-              Email:{' '}
-              <a href="mailto:info@sunkeydesignsystems.com">info@sunkeydesignsystems.com</a>
-            </p>
-          </Section>
+                {/* 4 */}
+                <h2 className="mt-10 text-xl">4. How we share your data</h2>
+                <p>
+                  Your personal data is not shared with third parties except in the following limited circumstances:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Google LLC</strong> — analytics data processed via Google Analytics 4 and Google Tag Manager. Google may transfer and process this data outside India. See{' '}
+                    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google&apos;s Privacy Policy</a>.
+                  </li>
+                  <li>
+                    <strong>IT and hosting providers</strong> — service providers who operate the infrastructure on which our website and email are hosted, bound by confidentiality obligations.
+                  </li>
+                  <li>
+                    <strong>Legal and regulatory authorities</strong> — where we are required to disclose data by law, court order, or governmental authority.
+                  </li>
+                </ul>
 
-        </div>
+                {/* 5 */}
+                <h2 className="mt-10 text-xl">5. Cookies</h2>
+                <p>
+                  We use cookies and similar tracking technologies. For full details of the cookies we use and how to manage them, please see our{' '}
+                  <a href="/cookie-policy">Cookie Policy</a>.
+                </p>
 
-        <div className="mt-12 pt-8 border-t border-border-light">
-          <Link
-            href="/"
-            className="text-[0.85rem] font-semibold text-brand-red hover:underline"
-          >
-            ← Back to Sunkey Design Systems
-          </Link>
-        </div>
-      </div>
+                {/* 6 */}
+                <h2 className="mt-10 text-xl">6. Data retention</h2>
+                <p>
+                  We retain personal data submitted through our forms for as long as is reasonably necessary to respond to your enquiry or fulfil a resource request, and for a period thereafter in case of follow-up. We do not retain personal data for longer than is necessary for the purpose for which it was collected. Analytics data is retained in accordance with Google&apos;s standard retention settings.
+                </p>
+                <p>
+                  You may request deletion of your personal data at any time (see Section 7).
+                </p>
 
-      {/* Inline prose styles — scoped to this page only */}
-      <style>{`
-        .prose-legal p {
-          font-size: 0.92rem;
-          line-height: 1.78;
-          color: #555;
-          margin-bottom: 14px;
-        }
-        .prose-legal ul {
-          margin: 10px 0 14px 20px;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-        .prose-legal li {
-          font-size: 0.9rem;
-          line-height: 1.72;
-          color: #555;
-        }
-        .prose-legal a {
-          color: #f05030;
-          text-decoration: underline;
-          text-underline-offset: 2px;
-        }
-        .prose-legal strong { color: #1a1a1a; font-weight: 700; }
-        .prose-legal code {
-          font-family: ui-monospace, monospace;
-          font-size: 0.82em;
-          background: #f2f2f2;
-          padding: 1px 5px;
-          border-radius: 3px;
-          color: #333;
-        }
-      `}</style>
-    </div>
-  )
-}
+                {/* 7 */}
+                <h2 className="mt-10 text-xl">7. Your rights under DPDPA</h2>
+                <p>
+                  As a Data Principal under the Digital Personal Data Protection Act, 2023, you have the following rights:
+                </p>
+                <ul>
+                  <li><strong>Right to access</strong> — to obtain confirmation of whether we process your personal data, and to receive a summary of it.</li>
+                  <li><strong>Right to correction and erasure</strong> — to have inaccurate or incomplete data corrected, or to have your data erased.</li>
+                  <li><strong>Right to grievance redressal</strong> — to have your grievances addressed within a reasonable time.</li>
+                  <li><strong>Right to withdraw consent</strong> — where processing is based on your consent, to withdraw that consent at any time.</li>
+                  <li><strong>Right to nominate</strong> — to nominate an individual to exercise your rights in the event of your death or incapacity.</li>
+                </ul>
+                <p>
+                  To exercise any of these rights, please contact us at <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. We will respond within 30 days.
+                </p>
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="mb-10">
-      <h2 className="text-[1.05rem] font-bold tracking-tight text-dark mb-4 mt-2">
-        {title}
-      </h2>
-      {children}
-    </div>
-  )
-}
+                {/* 8 */}
+                <h2 className="mt-10 text-xl">8. Data security</h2>
+                <p>
+                  We implement reasonable technical and organisational measures to protect your personal data against unauthorised access, disclosure, alteration, or destruction. However, no method of transmission over the internet is completely secure, and we cannot guarantee absolute security.
+                </p>
 
-function SubSection({ heading, children }: { heading: string; children: React.ReactNode }) {
-  return (
-    <div className="mb-5">
-      <h3 className="text-[0.9rem] font-bold text-dark mb-2">{heading}</h3>
-      {children}
-    </div>
+                {/* 9 */}
+                <h2 className="mt-10 text-xl">9. Children</h2>
+                <p>
+                  Our website is directed at business professionals and is not intended for children under the age of 18. We do not knowingly collect personal data from minors.
+                </p>
+
+                {/* 10 */}
+                <h2 className="mt-10 text-xl">10. Changes to this policy</h2>
+                <p>
+                  We may update this Privacy Policy from time to time. When we do, we will update the effective date at the top of this page. We encourage you to review this policy periodically. Continued use of our website after any changes constitutes your acknowledgement of the updated policy.
+                </p>
+
+                {/* 11 */}
+                <h2 className="mt-10 text-xl">11. Contact us</h2>
+                <p>
+                  If you have any questions, concerns, or grievances regarding this Privacy Policy or our data practices, please contact our Grievance Officer:
+                </p>
+                <p>
+                  <strong>Vipul Kumar S. Jain</strong><br />
+                  {COMPANY}<br />
+                  {ADDRESS}<br />
+                  Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+                </p>
+                <p>
+                  You also have the right to lodge a complaint with the Data Protection Board of India once it is constituted under the DPDPA.
+                </p>
+
+              </div>
+            </AnimateIn>
+          </div>
+        </section>
+      </main>
+    </>
   )
 }

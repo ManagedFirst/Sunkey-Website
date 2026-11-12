@@ -1,108 +1,99 @@
 import type { MetadataRoute } from 'next'
-import { ALL_SERVICES } from '@/lib/data/services'
-import { INDUSTRIES } from '@/lib/data/industries'
-import { CASE_STUDIES } from '@/lib/data/caseStudies'
-import { SERVICE_INDUSTRY_COMBOS } from '@/lib/data/pseoServiceIndustry'
-import { TECHNOLOGIES } from '@/lib/data/pseoTechnology'
-import { WORK_PROJECTS } from '@/lib/data/workProjects'
+import { locationRecords } from '@/data/pseo-locations'
+import { industryRecords }  from '@/data/pseo-industries'
 
-const BASE = 'https://sunkeydesignsystems.com'
-const NOW  = new Date()
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://managedfirst.in'
+const now      = new Date()
 
-type Freq = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
+// Helper
+const url = (path: string, priority: number, freq: MetadataRoute.Sitemap[0]['changeFrequency']): MetadataRoute.Sitemap[0] => ({
+  url:            `${SITE_URL}${path}`,
+  lastModified:   now,
+  changeFrequency:freq,
+  priority,
+})
 
-function url(
-  path: string,
-  priority: number,
-  changeFrequency: Freq = 'monthly',
-): MetadataRoute.Sitemap[number] {
-  return { url: `${BASE}${path}`, lastModified: NOW, priority, changeFrequency }
-}
-
-/**
- * Sitemap covering all Phase 1 pages.
- * Blog posts fetched from Payload CMS and included if available.
- * Phase 2 Service × Location pages (~144) added after launch.
- */
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-
-  /* ── Core static pages ──────────────────────────────── */
-  const staticPages: MetadataRoute.Sitemap = [
-    url('/',              1.0, 'weekly'),
-    url('/about',          0.9),
-    url('/manufacturing',  0.9),
-    url('/how-we-work',    0.9),
-    url('/contact',       0.9),
-    url('/services',      0.9),
-    url('/industries',    0.9),
-    url('/case-studies',  0.8),
-    url('/work',          0.9, 'weekly'),
-    url('/resources',     0.8, 'weekly'),
-  ]
-
-  /* ── Service pages ──────────────────────────────────── */
-  const servicePages: MetadataRoute.Sitemap = ALL_SERVICES.map(s =>
-    url(`/services/${s.slug}`, 0.8)
-  )
-
-  /* ── Industry pages ─────────────────────────────────── */
-  const industryPages: MetadataRoute.Sitemap = INDUSTRIES.map(i =>
-    url(`/industries/${i.slug}`, 0.8)
-  )
-
-  /* ── Case study pages ───────────────────────────────── */
-  const caseStudyPages: MetadataRoute.Sitemap = CASE_STUDIES.map(cs =>
-    url(`/case-studies/${cs.slug}`, 0.7)
-  )
-
-  /* ── pSEO: Service × Industry (54 pages) ────────────── */
-  const serviceIndustryPages: MetadataRoute.Sitemap = SERVICE_INDUSTRY_COMBOS.map(
-    ({ serviceSlug, industrySlug }) =>
-      url(`/services/${serviceSlug}/${industrySlug}`, 0.5, 'yearly')
-  )
-
-  /* ── pSEO: Technology (40 pages) ────────────────────── */
-  const technologyPages: MetadataRoute.Sitemap = TECHNOLOGIES.map(t =>
-    url(`/technology/${t.slug}`, 0.6)
-  )
-
-  /* ── Blog posts from Payload CMS ─────────────────────
-     Fetched at build time. Returns empty if CMS unavailable.
-  ─────────────────────────────────────────────────────── */
-  const blogPages = await getBlogPages()
-
-  /* ── Work project detail pages (16) ─────────────────── */
-  const workProjectPages: MetadataRoute.Sitemap = WORK_PROJECTS.map(p =>
-    url(`/work/${p.slug}`, 0.8)
-  )
-
+export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    ...staticPages,
-    ...servicePages,
-    ...industryPages,
-    ...caseStudyPages,
-    ...workProjectPages,
-    ...serviceIndustryPages,
-    ...technologyPages,
-    ...blogPages,
-  ]
-}
+    // ── Core pages ────────────────────────────────────────────────────────
+    url('/',                              1.0, 'weekly'),
+    url('/about',                         0.8, 'monthly'),
+    url('/about/manageengine-partnership',0.7, 'monthly'),
+    url('/contact',                       0.8, 'monthly'),
+    url('/free-consultation',             0.9, 'weekly'),
+    url('/dpdpa-compliance',              0.9, 'monthly'),
 
-async function getBlogPages(): Promise<MetadataRoute.Sitemap> {
-  try {
-    const res = await fetch(
-      `${BASE}/api/blog?limit=100&depth=0&select[slug]=true&select[updatedAt]=true`,
-      { cache: 'no-store' }
-    )
-    if (!res.ok) return []
-    const data = await res.json() as { docs: { slug: string; updatedAt: string }[] }
-    return (data.docs ?? []).map(post => ({
-      url:             `${BASE}/resources/${post.slug}`,
-      lastModified:    new Date(post.updatedAt),
-      priority:        0.6,
-      changeFrequency: 'monthly' as Freq,
-    }))
-  } catch {
-    return []
-  }
+    // ── Solutions hubs ────────────────────────────────────────────────────
+    url('/solutions',                     0.9, 'monthly'),
+    url('/solutions/iam',                 0.9, 'monthly'),
+    url('/solutions/itsm-esm',            0.9, 'monthly'),
+    url('/solutions/uems',                0.9, 'monthly'),
+    url('/solutions/itom',                0.9, 'monthly'),
+    url('/solutions/siem',                0.9, 'monthly'),
+    url('/solutions/it-analytics',        0.9, 'monthly'),
+
+    // ── IAM products ──────────────────────────────────────────────────────
+    url('/solutions/iam/ad360',               0.8, 'monthly'),
+    url('/solutions/iam/admanager-plus',       0.8, 'monthly'),
+    url('/solutions/iam/adself-service-plus',  0.8, 'monthly'),
+    url('/solutions/iam/adaudit-plus',         0.8, 'monthly'),
+    url('/solutions/iam/pam360',               0.8, 'monthly'),
+
+    // ── ITSM/ESM products ─────────────────────────────────────────────────
+    url('/solutions/itsm-esm/servicedesk-plus',    0.8, 'monthly'),
+    url('/solutions/itsm-esm/servicedesk-plus-msp',0.8, 'monthly'),
+
+    // ── UEMS products ─────────────────────────────────────────────────────
+    url('/solutions/uems/endpoint-central',          0.8, 'monthly'),
+    url('/solutions/uems/mobile-device-manager-plus',0.8, 'monthly'),
+
+    // ── ITOM products ─────────────────────────────────────────────────────
+    url('/solutions/itom/opmanager-plus',    0.8, 'monthly'),
+    url('/solutions/itom/site24x7',          0.8, 'monthly'),
+    url('/solutions/itom/applications-manager',0.8, 'monthly'),
+
+    // ── SIEM products ─────────────────────────────────────────────────────
+    url('/solutions/siem/log360',            0.8, 'monthly'),
+    url('/solutions/siem/firewall-analyzer', 0.8, 'monthly'),
+
+    // ── IT Analytics products ─────────────────────────────────────────────
+    url('/solutions/it-analytics/analytics-plus',0.8, 'monthly'),
+
+    // ── Services ─────────────────────────────────────────────────────────
+    url('/services',                          0.9, 'monthly'),
+    url('/services/consulting',               0.8, 'monthly'),
+    url('/services/evaluation-assistance',    0.8, 'monthly'),
+    url('/services/implementation',           0.8, 'monthly'),
+    url('/services/implementation-methodology', 0.8, 'monthly'),  // Added in content v1.0
+    url('/services/training',                 0.8, 'monthly'),
+    url('/services/managed-services',         0.8, 'monthly'),
+    url('/services/support-amc',              0.8, 'monthly'),
+
+    // ── Industries ────────────────────────────────────────────────────────
+    url('/industries/bfsi',         0.8, 'monthly'),
+    url('/industries/manufacturing',0.8, 'monthly'),
+    url('/industries/healthcare',   0.8, 'monthly'),
+    url('/industries/it-ites',      0.8, 'monthly'),
+    url('/industries/government-psu',0.8, 'monthly'),
+    url('/industries/education',    0.8, 'monthly'),
+
+    // ── Compliance ────────────────────────────────────────────────────────
+    url('/compliance/iso27001',        0.8, 'monthly'),
+    url('/compliance/rbi-it-framework',0.8, 'monthly'),
+
+    // ── Resources ─────────────────────────────────────────────────────────
+    url('/blog',            0.8, 'weekly'),
+    url('/case-studies',    0.8, 'monthly'),
+    url('/resources/guides',0.7, 'monthly'),
+
+    // ── Programmatic SEO: Product × Location (72 pages) ──────────────────
+    ...locationRecords.map(r =>
+      url(`/solutions/${r.productSlug}/${r.citySlug}`, 0.6, 'monthly')
+    ),
+
+    // ── Programmatic SEO: Product × Industry (36 pages) ──────────────────
+    ...industryRecords.map(r =>
+      url(`/solutions/${r.productSlug}/${r.industrySlug}`, 0.6, 'monthly')
+    ),
+  ]
 }

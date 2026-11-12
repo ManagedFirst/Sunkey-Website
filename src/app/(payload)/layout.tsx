@@ -1,10 +1,21 @@
-import type { ReactNode } from 'react'
+import type { ServerFunctionClient } from 'payload'
+import config from '@payload-config'
+import '@payloadcms/next/css'
+import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
+import React from 'react'
+import { importMap } from './admin/importMap'
 
-/**
- * Payload CMS admin layout.
- * Deliberately bare — no Navbar, Footer, or SmoothScrollProvider.
- * This is the correct pattern per the brief's route group standard.
- */
-export default function PayloadLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>
+type Args = { children: React.ReactNode }
+
+const serverFunction: ServerFunctionClient = async function (args) {
+  'use server'
+  return handleServerFunctions({ ...args, config, importMap })
 }
+
+const Layout = ({ children }: Args) => (
+  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+    {children}
+  </RootLayout>
+)
+
+export default Layout

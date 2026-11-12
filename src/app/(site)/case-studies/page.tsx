@@ -1,93 +1,46 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { AnimateOnView } from '@/components/ui/AnimateOnView'
-import { CASE_STUDIES } from '@/lib/data/caseStudies'
+import { buildMetadata } from '@/lib/metadata'
+import { breadcrumbSchema, schemaToString } from '@/lib/schema'
+import { AnimateIn } from '@/components/AnimateIn'
+import { SectionHeader } from '@/components/ui/Elements'
+import { CTABand } from '@/components/sections/Sections'
 
-export const metadata: Metadata = {
-  title: 'Case Studies',
-  description:
-    'Real electronics engineering projects delivered by Sunkey — PCB design, firmware, PCBA, and full product builds for hardware teams in the USA and Europe.',
-  alternates: { canonical: 'https://sunkeydesignsystems.com/case-studies' },
-}
+export const metadata: Metadata = buildMetadata({
+  title: 'ManageEngine Implementation Case Studies | ManagedFirst Technologies',
+  description: 'Real ManageEngine implementation outcomes from ManagedFirst engagements with Indian enterprises. Published with client approval.',
+  canonicalPath: '/case-studies',
+})
+const breadcrumbs = [{ name: 'Home', href: '/' }, { name: 'Case Studies', href: '/case-studies' }]
 
 export default function CaseStudiesPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-dark pt-[160px] pb-[100px] relative overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="absolute w-[400px] h-[400px] -top-[80px] right-[5%] rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(240,80,48,0.14) 0%, transparent 68%)' }}
-        />
-        <div className="section-container relative z-10">
-          <AnimateOnView>
-            <div className="section-label" style={{ color: 'rgba(255,255,255,0.30)' }}>
-              Selected Work
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaToString(breadcrumbSchema(breadcrumbs)) }} />
+
+      <section className="bg-white border-b border-border-default py-12">
+        <div className="site-container">
+          <AnimateIn>
+            <p className="text-overline uppercase tracking-widest text-teal mb-3">Knowledge</p>
+            <h1 className="font-display text-h1 font-extrabold text-navy mb-4">Case Studies.</h1>
+            <p className="text-body-lg text-charcoal/80 max-w-2xl">Real ManageEngine implementation outcomes — published with client approval, written from structured client interviews, using actual numbers.</p>
+          </AnimateIn>
+        </div>
+      </section>
+
+      <section className="bg-offwhite section-py">
+        <div className="site-container">
+          <AnimateIn>
+            <div className="max-w-2xl bg-white rounded-brand border border-border-default p-space-6">
+              <h2 className="font-display text-h3 font-bold text-navy mb-4">Our first case studies are on the way.</h2>
+              <p className="text-body text-charcoal leading-relaxed mb-4">We publish case studies only after client approval and a structured interview, using real numbers. Our first ones are coming soon.</p>
+              <p className="text-body text-charcoal leading-relaxed">Read our <Link href="/blog" className="text-blue hover:underline">implementation blog</Link> in the meantime, or <a href="/free-consultation" className="text-blue hover:underline">book a free consultation</a> to see if our approach fits your requirements.</p>
             </div>
-            <h1 className="text-hero font-black tracking-tightest leading-[1.08] text-white mb-5">
-              Projects that{' '}
-              <span className="gradient-text">shipped.</span>
-            </h1>
-            <p className="text-[1rem] leading-[1.72] text-white/48 max-w-[460px]">
-              Real projects, real technical specs — all client details anonymized.
-              These are the kinds of problems we solve.
-            </p>
-          </AnimateOnView>
+          </AnimateIn>
         </div>
       </section>
 
-      {/* Case study grid */}
-      <section className="py-[100px] bg-surface">
-        <div className="section-container">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-[2px]">
-            {CASE_STUDIES.map((cs, i) => (
-              <AnimateOnView key={cs.slug} delay={i * 0.08}>
-                <Link
-                  href={`/case-studies/${cs.slug}`}
-                  className="group block bg-white p-8 h-full transition-[box-shadow,transform] duration-300 hover:-translate-y-[3px] hover:shadow-[0_14px_48px_rgba(0,0,0,0.08)]"
-                >
-                  <div className="text-[0.65rem] font-bold tracking-[0.12em] uppercase text-brand-red mb-3.5">
-                    {cs.vertical} · {cs.location}
-                  </div>
-                  <div className="text-[1rem] font-bold tracking-tight leading-[1.32] text-dark mb-3">
-                    {cs.title}
-                  </div>
-                  <p className="text-[0.8rem] leading-[1.7] text-muted mb-6">
-                    {cs.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 pt-4 border-t border-border-light mb-5">
-                    {cs.specs.map(spec => (
-                      <span key={spec} className="flex items-center gap-1.5 text-[0.7rem] font-semibold text-dark">
-                        <span
-                          className="w-[5px] h-[5px] rounded-full flex-shrink-0"
-                          style={{ background: 'linear-gradient(135deg,#f05030,#ec4040)' }}
-                          aria-hidden="true"
-                        />
-                        {spec}
-                      </span>
-                    ))}
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 text-[0.8rem] font-bold text-brand-red transition-gap duration-150 group-hover:gap-2.5">
-                    Read project details <ArrowRight size={12} strokeWidth={2.5} />
-                  </span>
-                </Link>
-              </AnimateOnView>
-            ))}
-          </div>
-
-          {/* CTA to share requirement */}
-          <AnimateOnView className="mt-16 text-center">
-            <p className="text-[0.9rem] text-muted mb-5">
-              Have a similar project?
-            </p>
-            <Link href="/contact?type=requirement" className="btn-primary">
-              Share Your Requirement
-            </Link>
-          </AnimateOnView>
-        </div>
-      </section>
+      <CTABand heading="Evaluate our implementation approach directly." body="A free 30-minute consultation is more useful than a case study library. We will review your requirements and tell you specifically what our approach would look like for your situation." primaryCta={{ label: 'Book a Free Consultation', href: '/free-consultation' }} secondaryCta={{ label: 'Read our implementation blog', href: '/blog' }} />
     </>
   )
 }
