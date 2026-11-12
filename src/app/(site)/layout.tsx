@@ -1,19 +1,25 @@
-import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
-import CookieBanner from '@/components/ui/CookieBanner'
+import type { ReactNode } from 'react'
+import { Navbar }            from '@/components/layout/Navbar'
+import { Footer }            from '@/components/layout/Footer'
+import { SmoothScrollProvider } from '@/components/providers/SmoothScrollProvider'
+import { MotionProvider }    from '@/components/providers/MotionProvider'
+import { AnalyticsProvider } from '@/components/providers/AnalyticsProvider'
+import { CookieBanner }      from '@/components/ui/CookieBanner'
+import { ScrollToTop }       from '@/components/ui/ScrollToTop'
 
-// ── Site layout — public pages only ────────────────────────────────────────
-// Wraps all public routes with the site chrome (Navbar + Footer).
-// This layout is NOT applied to (payload)/ routes, so /admin never
-// gets Navbar/Footer wrapped around it — fixing the hydration crash.
-// globals.css is imported in the root layout.tsx one level up.
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default function SiteLayout({ children }: { children: ReactNode }) {
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID ?? ''
+
   return (
-    <>
-      <Navbar />
-      <main>{children}</main>
-      <Footer />
-      <CookieBanner />
-    </>
+    <MotionProvider>
+      <SmoothScrollProvider>
+        <ScrollToTop />
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+        <CookieBanner />
+        <AnalyticsProvider gtmId={gtmId} />
+      </SmoothScrollProvider>
+    </MotionProvider>
   )
 }

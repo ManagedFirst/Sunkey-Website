@@ -1,78 +1,131 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import { footerColumns, footerBottomBar } from '@/data/navigation'
+
+const SERVICES = [
+  { label: 'PCB Design',                href: '/services/pcb-design'             },
+  { label: 'Embedded Firmware',         href: '/services/embedded-firmware'       },
+  { label: 'PCBA & Manufacturing',      href: '/services/pcba-manufacturing'      },
+  { label: 'Drone & UAV Electronics',   href: '/services/drone-uav-electronics'   },
+  { label: 'IoT & Wireless',            href: '/services/iot-wireless'            },
+  { label: 'High-Speed & FPGA',         href: '/services/high-speed-fpga-design'  },
+  { label: 'Contract Engineering',      href: '/services/contract-engineering'    },
+  { label: 'Cable Harness & Box Build', href: '/services/cable-harness-box-build' },
+] as const
+
+const INDUSTRIES = [
+  { label: 'Semiconductor',         href: '/industries/semiconductor'           },
+  { label: 'Industrial Automation', href: '/industries/industrial-automation'   },
+  { label: 'Drone & UAV',           href: '/industries/drone-uav'               },
+  { label: 'IoT & Smart Devices',   href: '/industries/iot-smart-devices'       },
+  { label: 'Automotive',            href: '/industries/automotive'              },
+  { label: 'Agricultural Tech',     href: '/industries/agricultural-technology' },
+] as const
+
+const COMPANY = [
+  { label: 'Manufacturing', href: '/manufacturing' },
+  { label: 'How We Work',   href: '/how-we-work'  },
+  { label: 'Our Work',      href: '/work'          },
+  { label: 'About',         href: '/about'         },
+  { label: 'Resources',     href: '/resources'     },
+  { label: 'Contact',       href: '/contact'       },
+  { label: 'LinkedIn',      href: 'https://linkedin.com/company/sunkey-design-systems', external: true },
+] as const
+
+const CERTS = ['CE', 'FCC', 'EMI/EMC', 'ISO 9001', 'IATF 16949'] as const
 
 export function Footer() {
   return (
-    <footer className="relative bg-navy text-white overflow-hidden">
-      {/* Subtle gradient */}
-      <div className="absolute bottom-0 left-0 w-full h-1/2 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at bottom left, rgba(124,58,237,0.08) 0%, transparent 70%)' }}
-        aria-hidden="true" />
+    <footer className="bg-[#080A0D] pt-[72px] pb-9 border-t border-white/[0.06]" aria-label="Site footer">
+      <div className="section-container">
 
-      {/* Main footer */}
-      <div className="site-container relative" style={{ paddingTop: '5rem', paddingBottom: '4rem' }}>
+        {/* Top grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-10 lg:gap-[52px] mb-[52px]">
 
-        {/* Tagline block */}
-        <div style={{ marginBottom: '3.5rem', paddingBottom: '3rem', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-          <p className="font-display font-bold text-white leading-snug"
-            style={{ fontSize: 'clamp(18px, 2vw, 24px)' }}>
-            Your ManageEngine. Our Expertise.
-          </p>
-          <p className="font-display font-bold text-white/60"
-            style={{ fontSize: 'clamp(18px, 2vw, 24px)' }}>
-            Zero Hassle.
-          </p>
-          <p className="text-white/40 mt-2" style={{ fontSize: '13px' }}>
-            Authorized ManageEngine Partner · Chennai, India · Pan-India delivery
-          </p>
-        </div>
-
-        {/* 5-column links */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-          {footerColumns.map(col => (
-            <div key={col.heading}>
-              <h4 className="text-white font-semibold uppercase tracking-[0.1em]"
-                style={{ fontSize: '11px', marginBottom: '1.25rem' }}>
-                {col.heading}
-              </h4>
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {col.items.map(item => (
-                  <li key={item.label}>
-                    <Link href={item.href}
-                      className="text-white/50 hover:text-white transition-colors duration-200"
-                      style={{ fontSize: '13px', lineHeight: 1.5 }}>
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          {/* Brand */}
+          <div>
+            <Link href="/" className="inline-flex mb-5 cursor-pointer" aria-label="Sunkey Design Systems">
+              <Image
+                src="/images/logo-white.png"
+                alt="Sunkey Design Systems"
+                width={160}
+                height={36}
+                className="h-9 w-auto"
+              />
+            </Link>
+            <p className="text-[0.85rem] leading-[1.72] text-white/55 mb-5 max-w-[270px]">
+              End-to-end electronics engineering — PCB design, embedded firmware, PCBA, and manufacturing
+              for hardware teams in the USA and Europe.
+            </p>
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[0.78rem] text-white/40">Chennai, India</span>
+              <a href="mailto:info@sunkeydesignsystems.com" className="text-[0.82rem] text-white/55 hover:text-white transition-colors duration-150 cursor-pointer">
+                info@sunkeydesignsystems.com
+              </a>
+              <a href="https://www.sunkeydesignsystems.com" target="_blank" rel="noopener noreferrer" className="text-[0.82rem] text-white/55 hover:text-white transition-colors duration-150 cursor-pointer">
+                sunkeydesignsystems.com
+              </a>
             </div>
-          ))}
+          </div>
+
+          <FooterCol title="Services"   links={SERVICES}   />
+          <FooterCol title="Industries" links={INDUSTRIES}  />
+          <FooterCol title="Company"    links={COMPANY}     />
         </div>
 
-        {/* Disclaimer */}
-        <div style={{ marginTop: '3rem', paddingTop: '2.5rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          <p className="text-white/30" style={{ fontSize: '12px', lineHeight: 1.6, maxWidth: '560px' }}>
-            ManagedFirst Technologies is an authorized ManageEngine partner in India.
-            ManageEngine is a trademark of Zoho Corporation Pvt. Ltd.
-            All product names, logos, and brands are property of their respective owners.
-          </p>
-        </div>
-      </div>
-
-      {/* Bottom bar */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="site-container" style={{ paddingTop: '1.25rem', paddingBottom: '1.25rem' }}>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-            <p className="text-white/60" style={{ fontSize: '12px' }}>
-              {footerBottomBar.copyright}
-            </p>
-            <p className="text-white/40 sm:text-right" style={{ fontSize: '12px' }}>
-              {footerBottomBar.cin ? <>{footerBottomBar.cin} &nbsp;·&nbsp; </> : null}Reg. Office: {footerBottomBar.address}
-            </p>
+        {/* Bottom bar */}
+        <div className="pt-7 border-t border-white/[0.06] flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 flex-wrap">
+            <span className="text-[0.7rem] text-white/30">
+              © 2025 Sunkey Design Systems Pvt. Ltd.&nbsp;&nbsp;·&nbsp;&nbsp;
+              DPIIT: DIPP273645&nbsp;&nbsp;·&nbsp;&nbsp;
+              CIN: U71100TN2025PTC178926
+            </span>
+            <div className="flex gap-2 flex-wrap">
+              {CERTS.map(cert => (
+                <span key={cert} className="px-2.5 py-0.5 border border-white/[0.1] rounded text-[0.6rem] font-bold tracking-[0.08em] text-white/35">
+                  {cert}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center gap-5">
+            <Link href="/privacy-policy" className="text-[0.72rem] text-white/35 hover:text-white/70 transition-colors duration-150 cursor-pointer">
+              Privacy Policy
+            </Link>
+            <Link href="/terms-of-service" className="text-[0.72rem] text-white/35 hover:text-white/70 transition-colors duration-150 cursor-pointer">
+              Terms of Service
+            </Link>
           </div>
         </div>
+
       </div>
     </footer>
+  )
+}
+
+interface LinkItem { readonly label: string; readonly href: string; readonly external?: boolean }
+
+function FooterCol({ title, links }: { title: string; links: readonly LinkItem[] }) {
+  return (
+    <div>
+      <div className="text-[0.68rem] font-bold tracking-[0.12em] uppercase text-white/30 mb-[18px]">{title}</div>
+      <ul className="list-none flex flex-col gap-2.5">
+        {links.map(link => (
+          <li key={link.href}>
+            {link.external ? (
+              <a href={link.href} target="_blank" rel="noopener noreferrer"
+                className="text-[0.84rem] text-white/55 hover:text-white transition-colors duration-150 cursor-pointer">
+                {link.label}
+              </a>
+            ) : (
+              <Link href={link.href}
+                className="text-[0.84rem] text-white/55 hover:text-white transition-colors duration-150 cursor-pointer">
+                {link.label}
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }

@@ -1,16 +1,27 @@
 import type { Metadata } from 'next'
 import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
-import config from '@payload-config'
-import { importMap } from '../importMap.js'
+import { importMap } from '../../importMap.js'
+import configPromise from '@payload-config'
+
+/**
+ * Payload CMS admin panel.
+ * Catch-all route handles all /admin/* paths.
+ *
+ * Note: force-dynamic because admin reads from the database on every request.
+ * The (payload) route group ensures this layout does not inherit
+ * the public site Navbar or Footer.
+ */
+export const dynamic = 'force-dynamic'
 
 type Args = {
-  params: Promise<{ segments: string[] }>
-  searchParams: Promise<{ [key: string]: string | string[] }>
+  params:       Promise<{ segments: string[] }>
+  searchParams: Promise<Record<string, string | string[]>>
 }
 
-export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
-  generatePageMetadata({ config, params, searchParams })
+export async function generateMetadata({ params, searchParams }: Args): Promise<Metadata> {
+  return generatePageMetadata({ config: configPromise, params, searchParams })
+}
 
-export default function Page({ params, searchParams }: Args) {
-  return RootPage({ config, importMap, params, searchParams })
+export default async function Page({ params, searchParams }: Args) {
+  return RootPage({ config: configPromise, importMap, params, searchParams })
 }
