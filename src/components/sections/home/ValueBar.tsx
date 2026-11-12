@@ -45,8 +45,8 @@ export function ValueBar() {
               >
                 <Icon size={18} className="text-accent flex-shrink-0 mt-0.5" strokeWidth={1.6} />
                 <div>
-                  <div className="text-[0.82rem] font-bold text-white mb-0.5">{v.title}</div>
-                  <div className="text-[0.72rem] text-white/40 leading-[1.5]">{v.desc}</div>
+                  <div className="text-[0.82rem] font-bold text-dark mb-0.5">{v.title}</div>
+                  <div className="text-[0.72rem] text-muted leading-[1.5]">{v.desc}</div>
                 </div>
               </div>
             )

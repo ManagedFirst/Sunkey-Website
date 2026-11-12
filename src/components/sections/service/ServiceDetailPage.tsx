@@ -109,17 +109,45 @@ export function ServiceDetailPage({ service }: ServiceDetailPageProps) {
         </div>
       </section>
 
-      {/* ICP — white, dark text */}
-      <section className="py-[70px] bg-white">
-        <div className="section-container">
-          <AnimateOnView className="max-w-[680px]">
-            <div className="section-label">Is This Right for You?</div>
-            <p className="text-[1.02rem] leading-[1.75] mt-3 mb-8" style={{ color:'#5A6072' }}>{service.icpText}</p>
-            <div className="flex items-center gap-3 flex-wrap">
-              <Link href="/contact?type=requirement" className="btn-primary">Share Your Requirement</Link>
-              <Link href="/contact?type=meeting" className="btn-ghost">Book a Discovery Call</Link>
-            </div>
-          </AnimateOnView>
+      {/* ICP — dark CTA */}
+      <section className="py-[80px] bg-dark relative overflow-hidden">
+        <div aria-hidden="true" className="absolute w-[500px] h-[500px] -top-[120px] right-[-60px] rounded-full pointer-events-none"
+             style={{ background:'radial-gradient(circle, rgba(255,90,31,0.12) 0%, transparent 65%)' }} />
+        <div className="section-container relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+            {/* Left */}
+            <AnimateOnView>
+              <div className="section-label" style={{ color:'rgba(255,255,255,0.30)' }}>Is This Right for You?</div>
+              <h2 className="font-extrabold tracking-tightest leading-[1.1] text-white mt-3 mb-5"
+                  style={{ fontSize:'clamp(1.6rem,2.8vw,2.2rem)' }}>
+                Built for teams who can&apos;t afford to get hardware wrong.
+              </h2>
+              <p className="text-[0.95rem] leading-[1.75] text-white/55 mb-8">{service.icpText}</p>
+              <div className="flex items-center gap-3 flex-wrap">
+                <Link href="/contact?type=requirement" className="btn-primary">Share Your Requirement</Link>
+                <Link href="/contact?type=meeting" className="btn-ghost">Book a Discovery Call</Link>
+              </div>
+            </AnimateOnView>
+
+            {/* Right — trust signals */}
+            <AnimateOnView delay={0.12}>
+              <div className="grid grid-cols-2 gap-px" style={{ background:'rgba(255,255,255,0.06)' }}>
+                {[
+                  { stat:'2 days',  label:'Quote turnaround'            },
+                  { stat:'98%',     label:'On-time delivery rate'       },
+                  { stat:'CE/FCC',  label:'Compliance support built in' },
+                  { stat:'E2E',     label:'Concept to production'       },
+                ].map(({ stat, label }) => (
+                  <div key={label} className="flex flex-col gap-1 p-7" style={{ background:'#0D0F14' }}>
+                    <div className="text-[1.5rem] font-black tracking-tight gradient-text">{stat}</div>
+                    <div className="text-[0.78rem] text-white/40 leading-[1.5]">{label}</div>
+                  </div>
+                ))}
+              </div>
+            </AnimateOnView>
+
+          </div>
         </div>
       </section>
 

@@ -111,11 +111,11 @@ export default function AboutPage() {
       </section>
 
       {/* Differentiators */}
-      <section className="py-[100px] bg-surface">
+      <section className="py-[100px] bg-dark">
         <div className="section-container">
           <AnimateOnView className="mb-14">
             <div className="section-label">What Sets Us Apart</div>
-            <h2 className="text-section font-extrabold tracking-tightest leading-[1.1] text-dark max-w-[480px]">
+            <h2 className="text-section font-extrabold tracking-tightest leading-[1.1] text-white max-w-[480px]">
               Three reasons clients{' '}
               <span className="gradient-text">stay with Sunkey.</span>
             </h2>

@@ -109,7 +109,7 @@ export function ContactForm({ defaultTab = 'meeting' }: ContactFormProps) {
   if (status === 'success') {
     return (
       <div className="rounded-xl border border-white/[0.07] overflow-hidden"
-           style={{ background: 'rgba(255,255,255,0.035)' }}>
+           style={{ background: 'rgba(13,15,20,0.92)', backdropFilter: 'blur(12px)' }}>
         <div className="p-10 text-center">
           <div
             className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-5 border border-brand-orange/25"
@@ -132,7 +132,7 @@ export function ContactForm({ defaultTab = 'meeting' }: ContactFormProps) {
 
   return (
     <div className="rounded-xl overflow-hidden border border-white/[0.07]"
-         style={{ background: 'rgba(255,255,255,0.035)' }}>
+         style={{ background: 'rgba(13,15,20,0.92)', backdropFilter: 'blur(12px)' }}>
 
       {/* Tab bar */}
       <div role="tablist" aria-label="Contact options" className="flex border-b border-white/[0.06]">

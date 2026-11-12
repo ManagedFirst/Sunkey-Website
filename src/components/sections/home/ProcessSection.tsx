@@ -22,7 +22,7 @@ export function ProcessSection() {
             <div className="section-label" style={{ color:"rgba(255,255,255,0.75)" }}>The Process</div>
             <h2 className="font-extrabold tracking-tightest leading-[1.1] text-white"
                 style={{ fontSize:'clamp(2rem,3.5vw,2.8rem)' }}>
-              From brief<br /><span className="text-white font-black">to delivered.</span>
+              From brief <span className="text-white font-black">to delivered.</span>
             </h2>
           </div>
           <p className="text-[0.88rem] text-white/80 lg:max-w-[260px] lg:text-right leading-[1.6]">
@@ -30,13 +30,13 @@ export function ProcessSection() {
           </p>
         </AnimateOnView>
 
-        <div className="relative grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
+        <div className="relative grid grid-cols-1 lg:grid-cols-4 gap-4">
           <div aria-hidden="true"
                className="hidden lg:block absolute top-[27px] left-[calc(12.5%+22px)] right-[calc(12.5%+22px)] h-px"
                style={{ background:'linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.5), rgba(255,255,255,0.3))' }} />
           {STEPS.map((step, i) => (
-            <AnimateOnView key={step.num} delay={i * 0.1}>
-              <div className="group card-v2 flex flex-col">
+            <AnimateOnView key={step.num} delay={i * 0.1} className="h-full">
+              <div className="group card-v2 flex flex-col h-full">
                 <div className="flex items-start justify-between mb-5">
                   <div className="w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 text-[0.85rem] font-bold text-accent"
                        style={{ border:'1px solid rgba(255,90,31,0.45)', background:'rgba(255,90,31,0.08)' }}>
